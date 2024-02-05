@@ -1,24 +1,24 @@
-version: '3.1'
+version: '3'
 
 services:
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypass
-      POSTGRES_DB: mydb
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: my-mysql-container
     ports:
-      - "5432:5432"
+      - "3306:3306"
 
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-container
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: password
     ports:
-      - "5050:80"
+      - "8080:80"
     depends_on:
-      - db
+      - mysql
 
